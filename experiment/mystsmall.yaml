@@ -1,0 +1,3 @@
+data:
+  train_manifest: /home/cs224s/child-speech/outputs/deepspeech/manifest_small.train
+  val_manifest: /home/cs224s/child-speech/outputs/deepspeech/manifest_small.train

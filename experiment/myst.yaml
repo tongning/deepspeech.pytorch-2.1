@@ -1,0 +1,13 @@
+data:
+  train_manifest: /home/cs224s/child-speech/outputs/deepspeech/manifest.train
+  val_manifest: /home/cs224s/child-speech/outputs/deepspeech/manifest.dev
+  num_workers: 12
+  batch_size: 2
+training:
+  finetune: true
+  epochs: 3
+checkpointing:
+  continue_from: /home/cs224s/child-speech/models/deepspeech.pytorch-2.1/librispeech_pretrained_v2.pth
+  checkpoint_per_iteration: 5000
+visualization:
+  tensorboard: true
