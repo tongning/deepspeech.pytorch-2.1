@@ -204,12 +204,12 @@ def train(cfg):
         train_sampler.reset_training_step(training_step=state.training_step)
         for i, (data) in enumerate(train_loader, start=state.training_step):
             state.set_training_step(training_step=i)
-            inputs, targets, input_percentages, target_sizes = data
+            inputs, targets, input_percentages, target_sizes, transcript_name = data
             input_sizes = input_percentages.mul_(int(inputs.size(3))).int()
             # measure data loading time
             data_time.update(time.time() - end)
             inputs = inputs.to(device)
-
+            
             out, output_sizes = model(inputs, input_sizes)
             out = out.transpose(0, 1)  # TxNxH
 
@@ -231,6 +231,7 @@ def train(cfg):
             else:
                 print(error)
                 print('Skipping grad update')
+                os.system(f"echo {transcript_name} >> bad_examples.txt")
                 loss_value = 0
 
             state.avg_loss += loss_value

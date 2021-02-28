@@ -168,7 +168,7 @@ class SpectrogramDataset(Dataset, SpectrogramParser):
         audio_path, transcript_path = sample[0], sample[1]
         spect = self.parse_audio(audio_path)
         transcript = self.parse_transcript(transcript_path)
-        return spect, transcript
+        return spect, transcript, transcript_path
 
     def parse_transcript(self, transcript_path):
         with open(transcript_path, 'r', encoding='utf8') as transcript_file:
@@ -197,13 +197,14 @@ def _collate_fn(batch):
         sample = batch[x]
         tensor = sample[0]
         target = sample[1]
+        transcript_name = sample[2]
         seq_length = tensor.size(1)
         inputs[x][0].narrow(1, 0, seq_length).copy_(tensor)
         input_percentages[x] = seq_length / float(max_seqlength)
         target_sizes[x] = len(target)
         targets.extend(target)
     targets = torch.IntTensor(targets)
-    return inputs, targets, input_percentages, target_sizes
+    return inputs, targets, input_percentages, target_sizes, transcript_name
 
 
 class AudioDataLoader(DataLoader):
